@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+print "Enter Project Name: "
+projectName = gets.chomp
+
+if projectName.length > 1
+	createProject = "flutter create " + projectName + 
+		"&& cd " + projectName + 
+		"&& touch sonar.properties" +
+		"&& flutter pub add get" +
+		"&& flutter pub add dio"
+
+	createStructures = "&& cd lib" +
+		"&& mkdir assets" +
+		"&& mkdir base" +
+		"&& mkdir presentation" +
+		"&& mkdir network" +
+		"&& mkdir storage" +
+		"&& mkdir services"
+
+	createExamples = 
+		"&& cd presentation" +
+		"&& mkdir example" +
+		"&& cd example" +
+		"&& mkdir constants" +
+		"&& cd constants" +
+		"&& touch example_constants.dart" +
+		"&& cd .." +
+		"&& mkdir controller" +
+		"&& cd controller" +
+		"&& touch example_controller.dart" +
+		"&& touch example_binding.dart" +
+		"&& cd .." +
+		"&& mkdir view" +
+		"&& cd view" +
+		"&& touch example_page.dart" +
+		"&& cd .." +
+		"&& mkdir model" +
+		"&& cd model" +
+		"&& touch example_viewmodel.dart" +
+		"&& touch example_model.dart" +
+		"&& touch example_enum.dart" +
+		"&& cd .."
+
+	exec(
+	createProject +
+	createStructures +
+	createExamples
+	)
+else
+	puts "Please enter project name!"
+end
