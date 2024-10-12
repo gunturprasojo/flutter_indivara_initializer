@@ -79,6 +79,7 @@ super.key, \n
 \n
 @override \n
 Widget build(BuildContext context) {\n
+return Container();
 }\n
 }
 '''
@@ -116,7 +117,7 @@ unitTestInitializer = '''test("sut = system under test ", () async { });'''
 constantTestClassInitializer = 
 %W[
 '''
-import "../../../../lib/modules/#{presentationName.downcase}/constants/#{presentationName.downcase}_constant.dart"; \n
+import "../../../../lib/presentation/#{presentationName.downcase}/constants/#{presentationName.downcase}_constant.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
@@ -130,7 +131,7 @@ var sut = #{presentationName.capitalize}Constant();\n
 controllerTestBindingInitializer =  
 %W[
 '''
-import "../../../../lib/modules/#{presentationName.downcase}/controller/#{presentationName.downcase}_binding.dart"; \n
+import "../../../../lib/presentation/#{presentationName.downcase}/controller/#{presentationName.downcase}_binding.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
@@ -145,7 +146,7 @@ var sut = #{presentationName.capitalize}Binding();\n
 controllerTestClassInitializer = 
 %W[
 '''
-import "../../../../lib/modules/#{presentationName.downcase}/controller/#{presentationName.downcase}_controller.dart"; \n
+import "../../../../lib/presentation/#{presentationName.downcase}/controller/#{presentationName.downcase}_controller.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
@@ -160,7 +161,7 @@ var sut = #{presentationName.capitalize}Controller();\n
 serviceTestClassInitializer = 
 %W[
 '''
-import "../../../../lib/modules/#{presentationName.downcase}/service/#{presentationName.downcase}_service.dart"; \n
+import "../../../../lib/presentation/#{presentationName.downcase}/service/#{presentationName.downcase}_service.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
