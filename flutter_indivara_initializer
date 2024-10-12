@@ -9,17 +9,23 @@ if projectName.length > 1
 		"&& touch sonar.properties" +
 		"&& flutter pub add get" +
 		"&& flutter pub add dio"
-
-	createStructures = "&& cd lib" +
+	
+	createStructureComponents = 
 		"&& mkdir assets" +
 		"&& mkdir base" +
 		"&& mkdir presentation" +
 		"&& mkdir network" +
 		"&& mkdir storage" +
 		"&& mkdir services" +
-		"&& mkdir ui-components"
+		"&& mkdir ui-components" +
+		"&& cd .."
 
-	createExamples = 
+	createStructure = "&& cd lib" + createStructureComponents
+	
+	createStructureTest = "&& cd test" + createStructureComponents
+
+	createExample = 
+		"&& cd lib" +
 		"&& cd presentation" +
 		"&& mkdir example" +
 		"&& cd example" +
@@ -50,8 +56,9 @@ if projectName.length > 1
 
 	exec(
 	createProject +
-	createStructures +
-	createExamples
+	createStructure +
+	createStructureTest +
+	createExample
 	)
 else
 	puts "Please enter project name!"
