@@ -3,46 +3,175 @@
 print "Enter Presentation Name: "
 presentationName = gets.chomp
 
-#Presentation
+#PRESENTATION
 constantClassInitializer = 
-    '''" class ''' + presentationName.capitalize + '''Constant {  }"'''
+%W[
+'''
+import "package:get/get.dart"; \n
+class #{presentationName.capitalize}Constant { \n
 
-controllerBindingInitializer =  
-    '''" class ''' + presentationName.capitalize + '''Binding extends Bindings {}"'''
+}
+'''
+].join(' ')
+
+controllerBindingInitializer = 
+%W[
+'''
+import "../service/#{presentationName.downcase}_service.dart"; \n
+import "#{presentationName.downcase}_controller.dart"; \n
+import "package:get/get.dart"; \n \n
+class #{presentationName.capitalize}Binding extends Bindings { \n
+@override \n
+void dependencies() { \n
+ #{presentationName.capitalize}Service #{presentationName.downcase}Service = #{presentationName.capitalize}Service(); \n
+
+  #{presentationName.capitalize}ControllerInterface controller = #{presentationName.capitalize}Controller(
+      #{presentationName.downcase}Service: #{presentationName.downcase}Service,
+    ) as #{presentationName.capitalize}ControllerInterface; \n
+    \n
+    Get.put(controller);
+}\n
+}
+'''
+].join(' ')
 
 controllerClassInitializer = 
-    '''" abstract class ''' + presentationName.capitalize + '''ControllerRepository { } "''' +
-    '''" abstract class ''' + presentationName.capitalize + '''ControllerInterface { } "''' +
-    '''" class ''' + presentationName.capitalize + '''Controller implements ''' + presentationName.capitalize + '''ControllerRepository,''' + presentationName.capitalize + '''ControllerInterface''' + '''{  }"'''
+%W[
+'''
+import "../service/#{presentationName.downcase}_service.dart"; \n
+import "../model/#{presentationName.downcase}_viewmodel.dart"; \n
+import "package:get/get.dart"; \n \n
+abstract class #{presentationName.capitalize}ControllerRepository { \n 
+    late final #{presentationName.capitalize}ServiceInterface #{presentationName.downcase}Service; \n
+} \n \n
+abstract class #{presentationName.capitalize}ControllerInterface { \n 
+    late #{presentationName.capitalize}ViewModel viewModel; \n
+} \n \n
+class #{presentationName.capitalize}Controller extends GetxController implements 
+#{presentationName.capitalize}ControllerRepository , #{presentationName.capitalize}ControllerInterface { \n
+\n
+      @override \n
+  var viewModel = #{presentationName.capitalize}ViewModel(); \n
+\n
+    @override \n
+  late final #{presentationName.capitalize}ServiceInterface #{presentationName.downcase}Service; \n
+\n
+  #{presentationName.capitalize}Controller({ \n
+    required this.#{presentationName.downcase}Service, \n
+  }); \n
+}
+'''
+].join(' ')
 
 viewClassInitializer = 
-    '''"class ''' + presentationName.capitalize + '''Page extends GetView<''' + presentationName.capitalize + '''ControllerInterface> {}"'''
+%W[
+'''
+import "package:flutter/material.dart"; \n
+import "package:get/get.dart"; \n 
+import "../controller/#{presentationName.downcase}_controller.dart"; \n \n
+class #{presentationName.capitalize}Page extends GetView<#{presentationName.capitalize}ControllerInterface> { \n
+\n
+static const String routeName = "/#{presentationName.downcase}-page"; \n
+\n
+const #{presentationName.capitalize}Page({ \n
+super.key, \n
+}); \n
+\n
+@override \n
+Widget build(BuildContext context) {\n
+}\n
+}
+'''
+].join(' ')
 
-modelClassInitializer = '''" class ''' + presentationName.capitalize + '''ViewModel {  }"'''
+modelClassInitializer =
+%W[
+'''
+import "package:get/get.dart"; \n \n
+class #{presentationName.capitalize}ViewModel { \n
+    Rx<String> title = "''".obs; \n
+}
+'''
+].join(' ')
 
 serviceClassInitializer = 
-    '''" abstract class ''' + presentationName.capitalize + '''ServiceRepository { } "''' +
-    '''" abstract class ''' + presentationName.capitalize + '''Servicenterface { } "''' +
-    '''" class ''' + presentationName.capitalize + '''Service implements ''' + presentationName.capitalize + '''ServiceRepository,''' + presentationName.capitalize + '''Servicenterface''' + '''{  }"'''
-# EndPresentation
+%W[
+'''
+import "package:get/get.dart"; \n \n
+abstract class #{presentationName.capitalize}ServiceRepository { \n } \n \n
+abstract class #{presentationName.capitalize}ServiceInterface { \n } \n \n
+class #{presentationName.capitalize}Service implements 
+#{presentationName.capitalize}ServiceRepository , #{presentationName.capitalize}ServiceInterface { \n
+}
+'''
+].join(' ')
+#END PRESENTATION
 
-#Unit Test
+#UNIT TEST
 getTestMode = '''Get.testMode = true;'''
 
-unitTestInitializer = "test('sut " + presentationName + " ', () async { });"
+unitTestInitializer = '''test("sut = system under test ", () async { });'''
+
 
 constantTestClassInitializer = 
-    '''" void main(){ ''' + getTestMode + ''' var sut = ''' + presentationName.capitalize + '''Constant();  ''' + unitTestInitializer + '''}"'''
+%W[
+'''
+import "../../../../lib/modules/#{presentationName.downcase}/constants/#{presentationName.downcase}_constant.dart"; \n
+import "package:flutter_test/flutter_test.dart"; \n
+import "package:get/get.dart"; \n \n
+void main(){ \n
+#{getTestMode} \n
+var sut = #{presentationName.capitalize}Constant();\n
+#{unitTestInitializer} \n
+}
+'''
+].join(' ')
 
 controllerTestBindingInitializer =  
-    '''" void main(){ ''' + getTestMode + '''  var sut = ''' + presentationName.capitalize + '''Binding();  ''' + unitTestInitializer + '''}"'''
+%W[
+'''
+import "../../../../lib/modules/#{presentationName.downcase}/controller/#{presentationName.downcase}_binding.dart"; \n
+import "package:flutter_test/flutter_test.dart"; \n
+import "package:get/get.dart"; \n \n
+void main(){ \n
+#{getTestMode} \n
+var sut = #{presentationName.capitalize}Binding();\n
+#{unitTestInitializer} \n
+}
+'''
+].join(' ')
+
 
 controllerTestClassInitializer = 
-    '''" void main(){ ''' + getTestMode + '''  var sut = ''' + presentationName.capitalize + '''Controller();  ''' + unitTestInitializer + '''}"'''
+%W[
+'''
+import "../../../../lib/modules/#{presentationName.downcase}/controller/#{presentationName.downcase}_controller.dart"; \n
+import "package:flutter_test/flutter_test.dart"; \n
+import "package:get/get.dart"; \n \n
+void main(){ \n
+#{getTestMode} \n
+var sut = #{presentationName.capitalize}Controller();\n
+#{unitTestInitializer} \n
+}
+'''
+].join(' ')
+
 
 serviceTestClassInitializer = 
-   '''" void main(){ ''' + getTestMode + ''' var sut = ''' + presentationName.capitalize + '''Service();  ''' + unitTestInitializer + '''}"'''
-#End Unit Test
+%W[
+'''
+import "../../../../lib/modules/#{presentationName.downcase}/service/#{presentationName.downcase}_service.dart"; \n
+import "package:flutter_test/flutter_test.dart"; \n
+import "package:get/get.dart"; \n \n
+void main(){ \n
+#{getTestMode} \n
+var sut = #{presentationName.capitalize}Service();\n
+#{unitTestInitializer} \n
+}
+'''
+].join(' ')
+
+#END UNIT TEST
 
 if presentationName.length > 1
 
@@ -61,11 +190,11 @@ if presentationName.length > 1
 
     createController = 
             "\ && mkdir controller" +
-            "\ && cd controller" +
+            " && cd controller" +
             "\ && touch " + presentationName.downcase + "_binding.dart" +
             "\ && tee " + presentationName.downcase + "_binding.dart <<< " + controllerBindingInitializer +
-            "\ && touch " + presentationName.downcase + "_controller.dart" +
-            "\ && tee " + presentationName.downcase + "_controller.dart <<< " + controllerClassInitializer
+            " && touch " + presentationName.downcase + "_controller.dart" +
+            " && tee " + presentationName.downcase + "_controller.dart <<< " + controllerClassInitializer
     
     createView =
             "\ && mkdir view" +
@@ -83,7 +212,7 @@ if presentationName.length > 1
             "\ && mkdir service" +
             "\ && cd service" +
             "\ && touch " + presentationName.downcase + "_service.dart" +
-            "\ && tee " + presentationName.downcase + "_service.dart <<< " + serviceTestClassInitializer
+            "\ && tee " + presentationName.downcase + "_service.dart <<< " + serviceClassInitializer
     # EndPresentation
 
     back = "\ && cd .. "
@@ -111,7 +240,7 @@ if presentationName.length > 1
         "\ && mkdir service" +
         "\ && cd service" +
         "\ && touch " + presentationName.downcase + "_service_test.dart" +
-        "\ && tee " + presentationName.downcase + "_service_test.dart <<< " + constantTestClassInitializer
+        "\ && tee " + presentationName.downcase + "_service_test.dart <<< " + serviceTestClassInitializer
 
 
 	exec(
