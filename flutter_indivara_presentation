@@ -1,0 +1,141 @@
+#!/usr/bin/env ruby
+
+print "Enter Presentation Name: "
+presentationName = gets.chomp
+
+#Presentation
+constantClassInitializer = 
+    '''" class ''' + presentationName.capitalize + '''Constant {  }"'''
+
+controllerBindingInitializer =  
+    '''" class ''' + presentationName.capitalize + '''Binding extends Bindings {}"'''
+
+controllerClassInitializer = 
+    '''" abstract class ''' + presentationName.capitalize + '''ControllerRepository { } "''' +
+    '''" abstract class ''' + presentationName.capitalize + '''ControllerInterface { } "''' +
+    '''" class ''' + presentationName.capitalize + '''Controller implements ''' + presentationName.capitalize + '''ControllerRepository,''' + presentationName.capitalize + '''ControllerInterface''' + '''{  }"'''
+
+viewClassInitializer = 
+    '''"class ''' + presentationName.capitalize + '''Page extends GetView<''' + presentationName.capitalize + '''ControllerInterface> {}"'''
+
+modelClassInitializer = '''" class ''' + presentationName.capitalize + '''ViewModel {  }"'''
+
+serviceClassInitializer = 
+    '''" abstract class ''' + presentationName.capitalize + '''ServiceRepository { } "''' +
+    '''" abstract class ''' + presentationName.capitalize + '''Servicenterface { } "''' +
+    '''" class ''' + presentationName.capitalize + '''Service implements ''' + presentationName.capitalize + '''ServiceRepository,''' + presentationName.capitalize + '''Servicenterface''' + '''{  }"'''
+# EndPresentation
+
+#Unit Test
+getTestMode = '''Get.testMode = true;'''
+
+unitTestInitializer = "test('sut " + presentationName + " ', () async { });"
+
+constantTestClassInitializer = 
+    '''" void main(){ ''' + getTestMode + ''' var sut = ''' + presentationName.capitalize + '''Constant();  ''' + unitTestInitializer + '''}"'''
+
+controllerTestBindingInitializer =  
+    '''" void main(){ ''' + getTestMode + '''  var sut = ''' + presentationName.capitalize + '''Binding();  ''' + unitTestInitializer + '''}"'''
+
+controllerTestClassInitializer = 
+    '''" void main(){ ''' + getTestMode + '''  var sut = ''' + presentationName.capitalize + '''Controller();  ''' + unitTestInitializer + '''}"'''
+
+serviceTestClassInitializer = 
+   '''" void main(){ ''' + getTestMode + ''' var sut = ''' + presentationName.capitalize + '''Service();  ''' + unitTestInitializer + '''}"'''
+#End Unit Test
+
+if presentationName.length > 1
+
+    #Presentation
+	createPresentation = 
+            "cd lib" + 
+            "\ && cd presentation" +
+            "\ && mkdir " + presentationName.downcase + 
+            "\ && cd " + presentationName.downcase
+
+    createConstant = 
+            "\ && mkdir constants" +
+            "\ && cd constants" +
+            "\ && touch " + presentationName.downcase + "_constant.dart" +
+            "\ && tee " + presentationName.downcase + "_constant.dart <<< " + constantClassInitializer
+
+    createController = 
+            "\ && mkdir controller" +
+            "\ && cd controller" +
+            "\ && touch " + presentationName.downcase + "_binding.dart" +
+            "\ && tee " + presentationName.downcase + "_binding.dart <<< " + controllerBindingInitializer +
+            "\ && touch " + presentationName.downcase + "_controller.dart" +
+            "\ && tee " + presentationName.downcase + "_controller.dart <<< " + controllerClassInitializer
+    
+    createView =
+            "\ && mkdir view" +
+            "\ && cd view" +
+            "\ && touch " + presentationName.downcase + "_page.dart" +
+            "\ && tee " + presentationName.downcase + "_page.dart <<< " + viewClassInitializer
+
+    createViewModel = 
+            "\ && mkdir model" +
+            "\ && cd model" +
+            "\ && touch " + presentationName.downcase + "_viewmodel.dart" +
+            "\ && tee " + presentationName.downcase + "_viewmodel.dart <<< " + modelClassInitializer
+
+    createService = 
+            "\ && mkdir service" +
+            "\ && cd service" +
+            "\ && touch " + presentationName.downcase + "_service.dart" +
+            "\ && tee " + presentationName.downcase + "_service.dart <<< " + serviceTestClassInitializer
+    # EndPresentation
+
+    back = "\ && cd .. "
+    
+	createPresentationTest = 
+            "\ && cd test" + 
+            "\ && cd presentation" +
+            "\ && mkdir " + presentationName.downcase + 
+            "\ && cd " + presentationName.downcase
+    createConstantTest = 
+        "\ && mkdir constants" +
+        "\ && cd constants" +
+        "\ && touch " + presentationName.downcase + "_constant_test.dart" +
+        "\ && tee " + presentationName.downcase + "_constant_test.dart <<< " + constantTestClassInitializer
+
+    createControllerTest = 
+        "\ && mkdir controller" +
+        "\ && cd controller" +
+        "\ && touch " + presentationName.downcase + "_binding_test.dart" +
+        "\ && tee " + presentationName.downcase + "_binding_test.dart <<< " + controllerTestBindingInitializer +
+        "\ && touch " + presentationName.downcase + "_controller_test.dart" +
+        "\ && tee " + presentationName.downcase + "_controller_test.dart <<< " + controllerTestClassInitializer
+    
+    createServiceTest = 
+        "\ && mkdir service" +
+        "\ && cd service" +
+        "\ && touch " + presentationName.downcase + "_service_test.dart" +
+        "\ && tee " + presentationName.downcase + "_service_test.dart <<< " + constantTestClassInitializer
+
+
+	exec(
+	createPresentation + 
+    createConstant +
+    back +
+    createController +
+    back +
+    createView +
+    back +
+    createViewModel +
+    back +
+    createService +
+    back +
+    back +
+    back +
+    back +
+    createPresentationTest +
+    createConstantTest +
+    back +
+    createControllerTest +
+    back +
+    createServiceTest
+	)
+else
+	puts "Please enter Presentation Name name!"
+end
