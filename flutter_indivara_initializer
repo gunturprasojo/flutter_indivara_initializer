@@ -16,7 +16,8 @@ if projectName.length > 1
 		"&& mkdir presentation" +
 		"&& mkdir network" +
 		"&& mkdir storage" +
-		"&& mkdir services"
+		"&& mkdir services" +
+		"&& mkdir ui-components"
 
 	createExamples = 
 		"&& cd presentation" +
@@ -40,7 +41,12 @@ if projectName.length > 1
 		"&& touch example_viewmodel.dart" +
 		"&& touch example_model.dart" +
 		"&& touch example_enum.dart" +
+		"&& cd .." +
+		"&& mkdir service" +
+		"&& cd service" +
+		"&& touch example_service.dart" +
 		"&& cd .."
+
 
 	exec(
 	createProject +
