@@ -24,7 +24,7 @@ unitTestInitializer = '''test("sut = system under test ", () async { });'''
 serviceTestClassInitializer = 
 %W[
 '''
-import "../../../../lib/service/#{serviceName.downcase}/#{serviceName.downcase}_service.dart"; \n
+import "../../../lib/services/#{serviceName.downcase}/#{serviceName.downcase}_service.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
@@ -56,8 +56,8 @@ if serviceName.length > 1
             "\ && cd services" +
             "\ && mkdir " + serviceName.downcase + 
             "\ && cd " + serviceName.downcase +
-            "\ && touch " + serviceName.downcase + "_service.dart" +
-            "\ && tee " + serviceName.downcase + "_service.dart <<< " + serviceTestClassInitializer
+            "\ && touch " + serviceName.downcase + "_service_test.dart" +
+            "\ && tee " + serviceName.downcase + "_service_test.dart <<< " + serviceTestClassInitializer
 
 
 	exec(
