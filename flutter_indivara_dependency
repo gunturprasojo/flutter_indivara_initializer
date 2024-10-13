@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+print "Enter Dependency Name: "
+dependencyName = gets.chomp
+
+#SERVICE
+dependencyClassInitializer = 
+%W[
+'''
+abstract class #{dependencyName.capitalize}DependencySource { \n } \n \n
+abstract class #{dependencyName.capitalize}DependencyInterface { \n } \n \n
+class #{dependencyName.capitalize}Dependency implements 
+#{dependencyName.capitalize}DependencySource , #{dependencyName.capitalize}DependencyInterface { \n
+}
+'''
+].join(' ')
+#END PRESENTATION
+
+
+if dependencyName.length > 1
+
+    back = "\ && cd .. "
+    #Service
+	createDependency = 
+            "cd lib" + 
+            "\ && cd base" +
+            "\ && cd dependencies" +
+            "\ && mkdir " + dependencyName.downcase + 
+            "\ && cd " + dependencyName.downcase +
+            "\ && touch " + dependencyName.downcase + "_dependency.dart" +
+            "\ && tee " + dependencyName.downcase + "_dependency.dart <<< " + dependencyClassInitializer
+    # End Service
+
+	exec(
+    createDependency
+	)
+else
+	puts "Please enter Dependency Name!"
+end

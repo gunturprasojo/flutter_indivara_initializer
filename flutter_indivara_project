@@ -13,6 +13,9 @@ if projectName.length > 1
 	createStructureComponents = 
 		"&& mkdir assets" +
 		"&& mkdir base" +
+		"&& cd base" +
+		"&& mkdir dependencies" +
+		"&& cd .." +
 		"&& mkdir presentation" +
 		"&& mkdir network" +
 		"&& mkdir storage" +

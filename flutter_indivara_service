@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+print "Enter Service Name: "
+serviceName = gets.chomp
+
+#SERVICE
+serviceClassInitializer = 
+%W[
+'''
+abstract class #{serviceName.capitalize}DataSource { \n } \n \n
+abstract class #{serviceName.capitalize}ServiceInterface { \n } \n \n
+class #{serviceName.capitalize}Service implements 
+#{serviceName.capitalize}DataSource , #{serviceName.capitalize}ServiceInterface { \n
+}
+'''
+].join(' ')
+#END PRESENTATION
+
+#UNIT TEST
+getTestMode = '''Get.testMode = true;'''
+
+unitTestInitializer = '''test("sut = system under test ", () async { });'''
+
+serviceTestClassInitializer = 
+%W[
+'''
+import "../../../../lib/service/#{serviceName.downcase}/#{serviceName.downcase}_service.dart"; \n
+import "package:flutter_test/flutter_test.dart"; \n
+import "package:get/get.dart"; \n \n
+void main(){ \n
+#{getTestMode} \n
+var sut = #{serviceName.capitalize}Service();\n
+#{unitTestInitializer} \n
+}
+'''
+].join(' ')
+
+#END UNIT TEST
+
+if serviceName.length > 1
+
+    back = "\ && cd .. "
+    #Service
+	createService = 
+            "cd lib" + 
+            "\ && cd service" +
+            "\ && mkdir " + serviceName.downcase + 
+            "\ && cd " + serviceName.downcase +
+            "\ && mkdir requests" +
+            "\ && mkdir response" +
+            "\ && touch " + serviceName.downcase + "_service.dart" +
+            "\ && tee " + serviceName.downcase + "_service.dart <<< " + serviceClassInitializer
+    # End Service
+	createServiceTest = 
+            "\ && cd test" + 
+            "\ && cd service" +
+            "\ && mkdir " + serviceName.downcase + 
+            "\ && cd " + serviceName.downcase +
+            "\ && touch " + serviceName.downcase + "_service.dart" +
+            "\ && tee " + serviceName.downcase + "_service.dart <<< " + serviceTestClassInitializer
+
+
+	exec(
+    createService +
+    back + 
+    back + 
+    back + 
+    createServiceTest
+	)
+else
+	puts "Please enter Presentation Name name!"
+end

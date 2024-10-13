@@ -66,6 +66,7 @@ class #{presentationName.capitalize}Controller extends GetxController implements
 viewClassInitializer = 
 %W[
 '''
+//coverage:ignore-file \n
 import "package:flutter/material.dart"; \n
 import "package:get/get.dart"; \n 
 import "../controller/#{presentationName.downcase}_controller.dart"; \n \n
@@ -147,11 +148,16 @@ controllerTestClassInitializer =
 %W[
 '''
 import "../../../../lib/presentation/#{presentationName.downcase}/controller/#{presentationName.downcase}_controller.dart"; \n
+import "../../../../lib/presentation/#{presentationName.downcase}/service/#{presentationName.downcase}_service.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
+
+class Mock#{presentationName.capitalize}Service implements #{presentationName.capitalize}ServiceInterface { \n
+} \n \n
+
 void main(){ \n
 #{getTestMode} \n
-var sut = #{presentationName.capitalize}Controller();\n
+var sut = #{presentationName.capitalize}Controller(#{presentationName.downcase}Service :  Mock#{presentationName.capitalize}Service() );\n
 #{unitTestInitializer} \n
 }
 '''
