@@ -17,6 +17,28 @@ class #{dependencyName.capitalize}Dependency implements
 #END PRESENTATION
 
 
+#UNIT TEST
+getTestMode = '''Get.testMode = true;'''
+
+unitTestInitializer = '''test("sut = system under test ", () async { });'''
+
+dependencyTestClassInitializer = 
+%W[
+'''
+import "../../../../lib/base/dependencies/#{dependencyName.downcase}/#{dependencyName.downcase}_dependency.dart"; \n
+import "package:flutter_test/flutter_test.dart"; \n
+import "package:get/get.dart"; \n \n
+void main(){ \n
+#{getTestMode} \n
+var sut = #{dependencyName.capitalize}Dependency();\n
+#{unitTestInitializer} \n
+}
+'''
+].join(' ')
+
+#END UNIT TEST
+
+
 if dependencyName.length > 1
 
     back = "\ && cd .. "
@@ -31,8 +53,24 @@ if dependencyName.length > 1
             "\ && tee " + dependencyName.downcase + "_dependency.dart <<< " + dependencyClassInitializer
     # End Service
 
+     # Unit Test
+	createDependencyTest = 
+    "\ && cd test" + 
+    "\ && cd base" + 
+    "\ && cd dependencies" +
+    "\ && mkdir " + dependencyName.downcase + 
+    "\ && cd " + dependencyName.downcase +
+    "\ && touch " + dependencyName.downcase + "_dependency_test.dart" +
+    "\ && tee " + dependencyName.downcase + "_dependency_test.dart <<< " + dependencyTestClassInitializer
+    # End Unit Test
+
 	exec(
-    createDependency
+    createDependency +
+    back + 
+    back +
+    back +
+    back +
+    createDependencyTest
 	)
 else
 	puts "Please enter Dependency Name!"

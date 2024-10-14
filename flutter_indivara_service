@@ -51,6 +51,8 @@ if serviceName.length > 1
             "\ && touch " + serviceName.downcase + "_service.dart" +
             "\ && tee " + serviceName.downcase + "_service.dart <<< " + serviceClassInitializer
     # End Service
+
+    # Unit Test
 	createServiceTest = 
             "\ && cd test" + 
             "\ && cd services" +
@@ -58,6 +60,7 @@ if serviceName.length > 1
             "\ && cd " + serviceName.downcase +
             "\ && touch " + serviceName.downcase + "_service_test.dart" +
             "\ && tee " + serviceName.downcase + "_service_test.dart <<< " + serviceTestClassInitializer
+    # End Unit Test
 
 
 	exec(
