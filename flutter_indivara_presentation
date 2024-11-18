@@ -2,13 +2,14 @@
 
 print "Enter Presentation Name: "
 presentationName = gets.chomp
+presentationClassName = presentationName.split('_').map(&:capitalize).join
 
 #PRESENTATION
 constantClassInitializer = 
 %W[
 '''
 import "package:get/get.dart"; \n
-class #{presentationName.capitalize}Constant { \n
+class #{presentationClassName}Constant { \n
 
 }
 '''
@@ -20,14 +21,14 @@ controllerBindingInitializer =
 import "../service/#{presentationName.downcase}_service.dart"; \n
 import "#{presentationName.downcase}_controller.dart"; \n
 import "package:get/get.dart"; \n \n
-class #{presentationName.capitalize}Binding extends Bindings { \n
+class #{presentationClassName}Binding extends Bindings { \n
 @override \n
 void dependencies() { \n
- #{presentationName.capitalize}Service #{presentationName.downcase}Service = #{presentationName.capitalize}Service(); \n
+ #{presentationClassName}Service #{presentationName.downcase}Service = #{presentationClassName}Service(); \n
 
-  #{presentationName.capitalize}ControllerInterface controller = #{presentationName.capitalize}Controller(
+  #{presentationClassName}ControllerInterface controller = #{presentationClassName}Controller(
       #{presentationName.downcase}Service: #{presentationName.downcase}Service,
-    ) as #{presentationName.capitalize}ControllerInterface; \n
+    ) as #{presentationClassName}ControllerInterface; \n
     \n
     Get.put(controller);
 }\n
@@ -41,22 +42,22 @@ controllerClassInitializer =
 import "../service/#{presentationName.downcase}_service.dart"; \n
 import "../model/#{presentationName.downcase}_viewmodel.dart"; \n
 import "package:get/get.dart"; \n \n
-abstract class #{presentationName.capitalize}ControllerRepository { \n 
-    late final #{presentationName.capitalize}ServiceInterface #{presentationName.downcase}Service; \n
+abstract class #{presentationClassName}ControllerRepository { \n 
+    late final #{presentationClassName}ServiceInterface #{presentationName.downcase}Service; \n
 } \n \n
-abstract class #{presentationName.capitalize}ControllerInterface { \n 
-    late #{presentationName.capitalize}ViewModel viewModel; \n
+abstract class #{presentationClassName}ControllerInterface { \n 
+    late #{presentationClassName}ViewModel viewModel; \n
 } \n \n
-class #{presentationName.capitalize}Controller extends GetxController implements 
-#{presentationName.capitalize}ControllerRepository , #{presentationName.capitalize}ControllerInterface { \n
+class #{presentationClassName}Controller extends GetxController implements 
+#{presentationClassName}ControllerRepository , #{presentationClassName}ControllerInterface { \n
 \n
       @override \n
-  var viewModel = #{presentationName.capitalize}ViewModel(); \n
+  var viewModel = #{presentationClassName}ViewModel(); \n
 \n
     @override \n
-  late final #{presentationName.capitalize}ServiceInterface #{presentationName.downcase}Service; \n
+  late final #{presentationClassName}ServiceInterface #{presentationName.downcase}Service; \n
 \n
-  #{presentationName.capitalize}Controller({ \n
+  #{presentationClassName}Controller({ \n
     required this.#{presentationName.downcase}Service, \n
   }); \n
 }
@@ -70,11 +71,11 @@ viewClassInitializer =
 import "package:flutter/material.dart"; \n
 import "package:get/get.dart"; \n 
 import "../controller/#{presentationName.downcase}_controller.dart"; \n \n
-class #{presentationName.capitalize}Page extends GetView<#{presentationName.capitalize}ControllerInterface> { \n
+class #{presentationClassName}Page extends GetView<#{presentationClassName}ControllerInterface> { \n
 \n
 static const String routeName = "/#{presentationName.downcase}-page"; \n
 \n
-const #{presentationName.capitalize}Page({ \n
+const #{presentationClassName}Page({ \n
 super.key, \n
 }); \n
 \n
@@ -90,7 +91,7 @@ modelClassInitializer =
 %W[
 '''
 import "package:get/get.dart"; \n \n
-class #{presentationName.capitalize}ViewModel { \n
+class #{presentationClassName}ViewModel { \n
     Rx<String> title = "''".obs; \n
 }
 '''
@@ -100,10 +101,10 @@ serviceClassInitializer =
 %W[
 '''
 import "package:get/get.dart"; \n \n
-abstract class #{presentationName.capitalize}ServiceRepository { \n } \n \n
-abstract class #{presentationName.capitalize}ServiceInterface { \n } \n \n
-class #{presentationName.capitalize}Service implements 
-#{presentationName.capitalize}ServiceRepository , #{presentationName.capitalize}ServiceInterface { \n
+abstract class #{presentationClassName}ServiceRepository { \n } \n \n
+abstract class #{presentationClassName}ServiceInterface { \n } \n \n
+class #{presentationClassName}Service implements 
+#{presentationClassName}ServiceRepository , #{presentationClassName}ServiceInterface { \n
 }
 '''
 ].join(' ')
@@ -123,7 +124,7 @@ import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
 #{getTestMode} \n
-var sut = #{presentationName.capitalize}Constant();\n
+var sut = #{presentationClassName}Constant();\n
 #{unitTestInitializer} \n
 }
 '''
@@ -137,7 +138,7 @@ import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
 #{getTestMode} \n
-var sut = #{presentationName.capitalize}Binding();\n
+var sut = #{presentationClassName}Binding();\n
 #{unitTestInitializer} \n
 }
 '''
@@ -152,12 +153,12 @@ import "../../../../lib/presentation/#{presentationName.downcase}/service/#{pres
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 
-class Mock#{presentationName.capitalize}Service implements #{presentationName.capitalize}ServiceInterface { \n
+class Mock#{presentationClassName}Service implements #{presentationClassName}ServiceInterface { \n
 } \n \n
 
 void main(){ \n
 #{getTestMode} \n
-var sut = #{presentationName.capitalize}Controller(#{presentationName.downcase}Service :  Mock#{presentationName.capitalize}Service() );\n
+var sut = #{presentationClassName}Controller(#{presentationName.downcase}Service :  Mock#{presentationClassName}Service() );\n
 #{unitTestInitializer} \n
 }
 '''
@@ -172,7 +173,7 @@ import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
 #{getTestMode} \n
-var sut = #{presentationName.capitalize}Service();\n
+var sut = #{presentationClassName}Service();\n
 #{unitTestInitializer} \n
 }
 '''

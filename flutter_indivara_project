@@ -3,6 +3,7 @@
 print "Enter Project Name: "
 projectName = gets.chomp
 
+
 if projectName.length > 1
 	createProject = "flutter create " + projectName + 
 		"&& cd " + projectName + 

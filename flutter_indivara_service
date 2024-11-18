@@ -2,15 +2,16 @@
 
 print "Enter Service Name: "
 serviceName = gets.chomp
+serviceClassName = serviceName.split('_').map(&:capitalize).join
 
 #SERVICE
 serviceClassInitializer = 
 %W[
 '''
-abstract class #{serviceName.capitalize}DataSource { \n } \n \n
-abstract class #{serviceName.capitalize}ServiceInterface { \n } \n \n
-class #{serviceName.capitalize}Service implements 
-#{serviceName.capitalize}DataSource , #{serviceName.capitalize}ServiceInterface { \n
+abstract class #{serviceClassName}DataSource { \n } \n \n
+abstract class #{serviceClassName}ServiceInterface { \n } \n \n
+class #{serviceClassName}Service implements 
+#{serviceClassName}DataSource , #{serviceClassName}ServiceInterface { \n
 }
 '''
 ].join(' ')
@@ -29,7 +30,7 @@ import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
 #{getTestMode} \n
-var sut = #{serviceName.capitalize}Service();\n
+var sut = #{serviceClassName}Service();\n
 #{unitTestInitializer} \n
 }
 '''

@@ -2,15 +2,15 @@
 
 print "Enter Dependency Name: "
 dependencyName = gets.chomp
-
+dependencyClassName = dependencyName.split('_').map(&:capitalize).join
 #SERVICE
 dependencyClassInitializer = 
 %W[
 '''
-abstract class #{dependencyName.capitalize}DependencySource { \n } \n \n
-abstract class #{dependencyName.capitalize}DependencyInterface { \n } \n \n
-class #{dependencyName.capitalize}Dependency implements 
-#{dependencyName.capitalize}DependencySource , #{dependencyName.capitalize}DependencyInterface { \n
+abstract class #{dependencyClassName}DependencySource { \n } \n \n
+abstract class #{dependencyClassName}DependencyInterface { \n } \n \n
+class #{dependencyClassName}Dependency implements 
+#{dependencyClassName}DependencySource , #{dependencyClassName}DependencyInterface { \n
 }
 '''
 ].join(' ')
@@ -30,7 +30,7 @@ import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
 #{getTestMode} \n
-var sut = #{dependencyName.capitalize}Dependency();\n
+var sut = #{dependencyClassName}Dependency();\n
 #{unitTestInitializer} \n
 }
 '''
