@@ -2,7 +2,14 @@
 
 print "Enter Service Name: "
 serviceName = gets.chomp
+serviceFileName = serviceName.downcase
 serviceClassName = serviceName.split('_').map(&:capitalize).join
+
+
+def downcase_first_letter(str)
+    str[0].downcase + str[1..]
+end
+serviceVariableName = downcase_first_letter(serviceClassName)
 
 #SERVICE
 serviceClassInitializer = 
@@ -25,7 +32,7 @@ unitTestInitializer = '''test("sut = system under test ", () async { });'''
 serviceTestClassInitializer = 
 %W[
 '''
-import "../../../lib/services/#{serviceName.downcase}/#{serviceName.downcase}_service.dart"; \n
+import "../../../lib/services/#{serviceFileName}/#{serviceFileName}_service.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
@@ -45,22 +52,22 @@ if serviceName.length > 1
 	createService = 
             "cd lib" + 
             "\ && cd services" +
-            "\ && mkdir " + serviceName.downcase + 
-            "\ && cd " + serviceName.downcase +
+            "\ && mkdir " + serviceFileName + 
+            "\ && cd " + serviceFileName +
             "\ && mkdir requests" +
             "\ && mkdir response" +
-            "\ && touch " + serviceName.downcase + "_service.dart" +
-            "\ && tee " + serviceName.downcase + "_service.dart <<< " + serviceClassInitializer
+            "\ && touch " + serviceFileName + "_service.dart" +
+            "\ && tee " + serviceFileName + "_service.dart <<< " + serviceClassInitializer
     # End Service
 
     # Unit Test
 	createServiceTest = 
             "\ && cd test" + 
             "\ && cd services" +
-            "\ && mkdir " + serviceName.downcase + 
-            "\ && cd " + serviceName.downcase +
-            "\ && touch " + serviceName.downcase + "_service_test.dart" +
-            "\ && tee " + serviceName.downcase + "_service_test.dart <<< " + serviceTestClassInitializer
+            "\ && mkdir " + serviceFileName + 
+            "\ && cd " + serviceFileName +
+            "\ && touch " + serviceFileName + "_service_test.dart" +
+            "\ && tee " + serviceFileName + "_service_test.dart <<< " + serviceTestClassInitializer
     # End Unit Test
 
 

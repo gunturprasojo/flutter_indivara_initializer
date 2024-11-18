@@ -2,7 +2,10 @@
 
 print "Enter Dependency Name: "
 dependencyName = gets.chomp
+dependencyFileName = dependencyName.downcase
 dependencyClassName = dependencyName.split('_').map(&:capitalize).join
+
+
 #SERVICE
 dependencyClassInitializer = 
 %W[
@@ -25,7 +28,7 @@ unitTestInitializer = '''test("sut = system under test ", () async { });'''
 dependencyTestClassInitializer = 
 %W[
 '''
-import "../../../../lib/base/dependencies/#{dependencyName.downcase}/#{dependencyName.downcase}_dependency.dart"; \n
+import "../../../../lib/base/dependencies/#{dependencyFileName}/#{dependencyFileName}_dependency.dart"; \n
 import "package:flutter_test/flutter_test.dart"; \n
 import "package:get/get.dart"; \n \n
 void main(){ \n
@@ -47,10 +50,10 @@ if dependencyName.length > 1
             "cd lib" + 
             "\ && cd base" +
             "\ && cd dependencies" +
-            "\ && mkdir " + dependencyName.downcase + 
-            "\ && cd " + dependencyName.downcase +
-            "\ && touch " + dependencyName.downcase + "_dependency.dart" +
-            "\ && tee " + dependencyName.downcase + "_dependency.dart <<< " + dependencyClassInitializer
+            "\ && mkdir " + dependencyFileName + 
+            "\ && cd " + dependencyFileName +
+            "\ && touch " + dependencyFileName + "_dependency.dart" +
+            "\ && tee " + dependencyFileName + "_dependency.dart <<< " + dependencyClassInitializer
     # End Service
 
      # Unit Test
@@ -58,10 +61,10 @@ if dependencyName.length > 1
     "\ && cd test" + 
     "\ && cd base" + 
     "\ && cd dependencies" +
-    "\ && mkdir " + dependencyName.downcase + 
-    "\ && cd " + dependencyName.downcase +
-    "\ && touch " + dependencyName.downcase + "_dependency_test.dart" +
-    "\ && tee " + dependencyName.downcase + "_dependency_test.dart <<< " + dependencyTestClassInitializer
+    "\ && mkdir " + dependencyFileName + 
+    "\ && cd " + dependencyFileName +
+    "\ && touch " + dependencyFileName + "_dependency_test.dart" +
+    "\ && tee " + dependencyFileName + "_dependency_test.dart <<< " + dependencyTestClassInitializer
     # End Unit Test
 
 	exec(
