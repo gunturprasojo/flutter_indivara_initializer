@@ -3,13 +3,32 @@
 print "Enter Project Name: "
 projectName = gets.chomp
 
+settingsJson = 
+%W[
+'''
+{\n
+\t"java.configuration.updateBuildConfiguration": "interactive", \n
+\t"[dart]": { \n
+\t\t"editor.defaultFormatter": "Dart-Code.dart-code", \n
+\t\t"editor.formatOnSave": true, \n
+\t} \n
+}\n
+'''
+].join()
 
 if projectName.length > 1
 	createProject = "flutter create " + projectName + 
 		"&& cd " + projectName + 
 		"&& touch sonar.properties" +
 		"&& flutter pub add get" +
-		"&& flutter pub add dio"
+		"&& flutter pub add dio" + 
+#vscode
+		"&& mkdir .vscode" +
+		"&& cd .vscode" +
+		"\ && touch " + "settings.json" +
+		"\ && tee " + "settings.json <<< " + settingsJson +
+		"&& cd .."
+#vscode
 	
 	createStructureComponents = 
 		"&& mkdir assets" +

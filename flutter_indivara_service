@@ -1,9 +1,40 @@
 #!/usr/bin/env ruby
 
+#INPUT
+#Service Name
+puts '--------------------------------------------------'
 print "Enter Service Name: "
 serviceName = gets.chomp
 serviceFileName = serviceName.downcase
 serviceClassName = serviceName.split('_').map(&:capitalize).join
+puts 'File Name Pattern  :' + serviceFileName
+puts 'Class Name Pattern :' + serviceClassName
+puts '--------------------------------------------------'
+
+#Controller Interface
+puts '''
+Example Input : doLogin,forgotPassword.
+
+Generator will generate as : 
+Future<void> doLogin();
+Future<void> forgotPassword();
+In Interface.
+
+You need to change specific return if needed later.
+
+Please input without parameter.
+If no interface yet please fill Blank.
+Enter Function In Controller Presentation (separated with comma) : 
+'''
+interfaceName = gets.chomp
+interfaceFunctionNames = interfaceName.split(',').map(&:strip)
+puts interfaceFunctionNames.inspect
+interfaceFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
+'''
+Future<void> ''' + infName + '''();'''}
+puts interfaceFunctionsInitializer.inspect
+puts '--------------------------------------------------'
+#END OF INPUT
 
 
 def downcase_first_letter(str)
@@ -16,7 +47,7 @@ serviceClassInitializer =
 %W[
 '''
 abstract class #{serviceClassName}DataSource { \n } \n \n
-abstract class #{serviceClassName}ServiceInterface { \n } \n \n
+abstract class #{serviceClassName}ServiceInterface { \n #{interfaceFunctionsInitializer.join(' ')} \n } \n \n
 class #{serviceClassName}Service implements 
 #{serviceClassName}DataSource , #{serviceClassName}ServiceInterface { \n
 }
@@ -29,6 +60,13 @@ getTestMode = '''Get.testMode = true;'''
 
 unitTestInitializer = '''test("sut = system under test ", () async { });'''
 
+functionUnitTestInitializer = interfaceFunctionNames.map { |infName| + '''
+test("testing ''' + infName + '''()", () async { 
+    sut.''' + infName +'''();
+});
+'''} 
+puts functionUnitTestInitializer
+
 serviceTestClassInitializer = 
 %W[
 '''
@@ -39,6 +77,7 @@ void main(){ \n
 #{getTestMode} \n
 var sut = #{serviceClassName}Service();\n
 #{unitTestInitializer} \n
+#{functionUnitTestInitializer.join()} \n
 }
 '''
 ].join(' ')

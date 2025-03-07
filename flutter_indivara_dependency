@@ -1,17 +1,46 @@
 #!/usr/bin/env ruby
 
+#INPUT
+#Dependency Name
+puts '--------------------------------------------------'
 print "Enter Dependency Name: "
 dependencyName = gets.chomp
 dependencyFileName = dependencyName.downcase
 dependencyClassName = dependencyName.split('_').map(&:capitalize).join
+puts 'File Name Pattern  :' + dependencyFileName
+puts 'Class Name Pattern :' + dependencyClassName
+puts '--------------------------------------------------'
+#Controller Interface
+puts '''
+Example Input : doLogin,forgotPassword.
 
+Generator will generate as : 
+Future<void> doLogin();
+Future<void> forgotPassword();
+In Interface.
+
+You need to change specific return if needed later.
+
+Please input without parameter.
+If no interface yet please fill Blank.
+Enter Function In Controller Presentation (separated with comma) : 
+'''
+interfaceName = gets.chomp
+interfaceFunctionNames = interfaceName.split(',').map(&:strip)
+puts interfaceFunctionNames.inspect
+interfaceFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
+'''
+Future<void> ''' + infName + '''();'''} 
+puts interfaceFunctionsInitializer.inspect
+puts '--------------------------------------------------'
+#END OF INPUT
 
 #SERVICE
 dependencyClassInitializer = 
 %W[
 '''
 abstract class #{dependencyClassName}DependencySource { \n } \n \n
-abstract class #{dependencyClassName}DependencyInterface { \n } \n \n
+abstract class #{dependencyClassName}DependencyInterface { \n #{interfaceFunctionsInitializer.join(' ')} \n } \n \n
 class #{dependencyClassName}Dependency implements 
 #{dependencyClassName}DependencySource , #{dependencyClassName}DependencyInterface { \n
 }
@@ -25,6 +54,13 @@ getTestMode = '''Get.testMode = true;'''
 
 unitTestInitializer = '''test("sut = system under test ", () async { });'''
 
+functionUnitTestInitializer = interfaceFunctionNames.map { |infName| + '''
+test("testing ''' + infName + '''()", () async { 
+    sut.''' + infName +'''();
+});
+'''} 
+puts functionUnitTestInitializer
+
 dependencyTestClassInitializer = 
 %W[
 '''
@@ -35,6 +71,7 @@ void main(){ \n
 #{getTestMode} \n
 var sut = #{dependencyClassName}Dependency();\n
 #{unitTestInitializer} \n
+#{functionUnitTestInitializer.join()} \n
 }
 '''
 ].join(' ')

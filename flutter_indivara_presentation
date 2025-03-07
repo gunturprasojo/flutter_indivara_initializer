@@ -1,9 +1,39 @@
 #!/usr/bin/env ruby
 
+#INPUT
+#Presentation Name
+puts '--------------------------------------------------'
 print "Enter Presentation Name: "
 presentationName = gets.chomp
 presentationFileName = presentationName.downcase
 presentationClassName = presentationName.split('_').map(&:capitalize).join
+puts 'File Name Pattern  :' + presentationFileName
+puts 'Class Name Pattern :' + presentationClassName
+puts '--------------------------------------------------'
+#Controller Interface
+puts '''
+Example Input : doLogin,forgotPassword.
+
+Generator will generate as : 
+Future<void> doLogin();
+Future<void> forgotPassword();
+In Controller Interface.
+
+You need to change specific return if needed later.
+
+Please input without parameter.
+If no interface yet please fill Blank.
+Enter Function In Controller Presentation (separated with comma) : 
+'''
+interfaceName = gets.chomp
+interfaceFunctionNames = interfaceName.split(',').map(&:strip)
+puts interfaceFunctionNames.inspect
+interfaceFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
+'''
+Future<void> ''' + infName + '''();'''} 
+puts interfaceFunctionsInitializer.inspect
+puts '--------------------------------------------------'
+#END OF INPUT
 
 def downcase_first_letter(str)
     str[0].downcase + str[1..]
@@ -54,6 +84,7 @@ abstract class #{presentationClassName}ControllerRepository { \n
 } \n \n
 abstract class #{presentationClassName}ControllerInterface { \n 
     late #{presentationClassName}ViewModel viewModel; \n
+    #{interfaceFunctionsInitializer.join(' ')} \n
 } \n \n
 class #{presentationClassName}Controller extends GetxController implements 
 #{presentationClassName}ControllerRepository , #{presentationClassName}ControllerInterface { \n
@@ -122,6 +153,12 @@ getTestMode = '''Get.testMode = true;'''
 
 unitTestInitializer = '''test("sut = system under test ", () async { });'''
 
+functionUnitTestInitializer = interfaceFunctionNames.map { |infName| + '''
+test("testing ''' + infName + '''()", () async { 
+    sut.''' + infName +'''();
+});
+'''} 
+puts functionUnitTestInitializer
 
 constantTestClassInitializer = 
 %W[
@@ -167,6 +204,7 @@ void main(){ \n
 #{getTestMode} \n
 var sut = #{presentationClassName}Controller(#{presentationVariableName}Service :  Mock#{presentationClassName}Service() );\n
 #{unitTestInitializer} \n
+#{functionUnitTestInitializer.join()} \n
 }
 '''
 ].join(' ')
