@@ -31,6 +31,14 @@ puts interfaceFunctionNames.inspect
 interfaceFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
 '''
 Future<void> ''' + infName + '''();'''} 
+implementationFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
+'''
+    @override
+    Future<void> ''' + infName + '''() async {
+        //TODO: Implement This Function
+    }
+'''
+} 
 puts interfaceFunctionsInitializer.inspect
 puts '--------------------------------------------------'
 #END OF INPUT
@@ -89,15 +97,17 @@ abstract class #{presentationClassName}ControllerInterface { \n
 class #{presentationClassName}Controller extends GetxController implements 
 #{presentationClassName}ControllerRepository , #{presentationClassName}ControllerInterface { \n
 \n
-      @override \n
-  var viewModel = #{presentationClassName}ViewModel(); \n
+\t      @override \n
+\t  var viewModel = #{presentationClassName}ViewModel(); \n
 \n
-    @override \n
-  late final #{presentationClassName}ServiceInterface #{presentationVariableName}Service; \n
+\t    @override \n
+\t  late final #{presentationClassName}ServiceInterface #{presentationVariableName}Service; \n
 \n
-  #{presentationClassName}Controller({ \n
-    required this.#{presentationVariableName}Service, \n
-  }); \n
+\t #{presentationClassName}Controller({ \n
+\t\t    required this.#{presentationVariableName}Service, \n
+\t  }); \n
+
+\t #{implementationFunctionsInitializer.join(' ')} \n
 }
 '''
 ].join(' ')
