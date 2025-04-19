@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: ruby my_script.rb [options]"
+
+  opts.on("-h", "--help", "Show help") do
+    puts '''
+    ------------------------------------------------------------------------
+    Welcome to Flutter Indivara Framework
+    Version : 1.2.0
+
+    1. Flutter Indivara Project
+    example usage :
+    flutter_indivara --project ewallet
+
+    2. Flutter Indivara Presentation
+    example usage :
+    flutter_indivara --presentation login --function doLogin,register,validateOTP
+
+    3. Flutter Indivara Dependency
+    example usage :
+    flutter_indivara --dependency notification --function function1,function2,function3
+
+    4. Flutter Indivara Service
+    example usage :
+    flutter_indivara --service authorization --function function1,function2,function3
+
+    ------------------------------------------------------------------------
+    Version : 1.0.0 - 1.1.1
+    flutter_indivara_project
+    flutter_indivara_presentation
+    flutter_indivara_dependency
+    flutter_indivara_service
+    '''
+    puts opts
+    exit
+  end
+
+  opts.on("-h", "--version", "Show Version") do
+    puts "1.2.0"
+    exit
+  end
+
+  opts.on("-PROJECT_NAME", "--project=PROJECT_NAME", "Enter Project name") do |projectName|
+    options[:projectName] = projectName
+  end
+  opts.on("-nPRESENTATION_NAME", "--presentation=PRESENTATION_NAME", "Enter Presentation name") do |presentationName|
+    options[:presentationName] = presentationName
+  end
+  opts.on("-nFUNCTION_NAMES", "--function=FUNCTION_NAMES", "Enter Function name") do |functionNames|
+    options[:functionNames] = functionNames
+  end
+  opts.on("-nDEPENDENCY_NAME", "--dependency=DEPENDENCY_NAME", "Enter Dependency name") do |dependencyName|
+    options[:dependencyName] = dependencyName
+  end
+  opts.on("-nSERVICE_NAME", "--service=SERVICE_NAME", "Enter Service name") do |serviceName|
+    options[:serviceName] = serviceName
+  end
+end.parse!
+
+if options[:presentationName] && options[:functionNames]
+    exec("printf '#{options[:presentationName]}\n#{options[:functionNames]}' | flutter_indivara_presentation")
+elsif options[:projectName]
+    exec("printf '#{options[:projectName]}' | flutter_indivara_project")
+elsif options[:dependencyName] && options[:functionNames]
+    exec("printf '#{options[:dependencyName]}\n#{options[:functionNames]}' | flutter_indivara_dependency")
+elsif options[:serviceName] && options[:functionNames]
+    exec("printf '#{options[:serviceName]}\n#{options[:functionNames]}' | flutter_indivara_service")
+else
+  puts "Please Create Presentation and Function Properly"
+end
