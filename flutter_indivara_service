@@ -24,7 +24,7 @@ You need to change specific return if needed later.
 
 Please input without parameter.
 If no interface yet please fill Blank.
-Enter Function In Controller Presentation (separated with comma) : 
+Enter Function In Controller Services (separated with comma) : 
 '''
 interfaceName = gets.chomp
 interfaceFunctionNames = interfaceName.split(',').map(&:strip)
@@ -34,6 +34,15 @@ interfaceFunctionsInitializer = interfaceFunctionNames.map { |infName| +
 Future<void> ''' + infName + '''();'''}
 puts interfaceFunctionsInitializer.inspect
 puts '--------------------------------------------------'
+
+implementationFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
+'''
+    @override
+    Future<void> ''' + infName + '''() async {
+        //TODO: Implement This Function
+    }
+'''
+} 
 #END OF INPUT
 
 
@@ -50,10 +59,13 @@ abstract class #{serviceClassName}DataSource { \n } \n \n
 abstract class #{serviceClassName}ServiceInterface { \n #{interfaceFunctionsInitializer.join(' ')} \n } \n \n
 class #{serviceClassName}Service implements 
 #{serviceClassName}DataSource , #{serviceClassName}ServiceInterface { \n
+\n
+\t #{implementationFunctionsInitializer.join(' ')} \n
+\n
 }
 '''
 ].join(' ')
-#END PRESENTATION
+#END SERVICE
 
 #UNIT TEST
 getTestMode = '''Get.testMode = true;'''
@@ -118,5 +130,5 @@ if serviceName.length > 1
     createServiceTest
 	)
 else
-	puts "Please enter Presentation Name name!"
+	puts "Please enter Services Name!"
 end

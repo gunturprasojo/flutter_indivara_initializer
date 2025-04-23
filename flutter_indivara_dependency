@@ -23,7 +23,7 @@ You need to change specific return if needed later.
 
 Please input without parameter.
 If no interface yet please fill Blank.
-Enter Function In Controller Presentation (separated with comma) : 
+Enter Function In Dependency (separated with comma) : 
 '''
 interfaceName = gets.chomp
 interfaceFunctionNames = interfaceName.split(',').map(&:strip)
@@ -33,9 +33,18 @@ interfaceFunctionsInitializer = interfaceFunctionNames.map { |infName| +
 Future<void> ''' + infName + '''();'''} 
 puts interfaceFunctionsInitializer.inspect
 puts '--------------------------------------------------'
+
+implementationFunctionsInitializer = interfaceFunctionNames.map { |infName| + 
+'''
+    @override
+    Future<void> ''' + infName + '''() async {
+        //TODO: Implement This Function
+    }
+'''
+} 
 #END OF INPUT
 
-#SERVICE
+#DEPENDENCY
 dependencyClassInitializer = 
 %W[
 '''
@@ -43,10 +52,13 @@ abstract class #{dependencyClassName}DependencySource { \n } \n \n
 abstract class #{dependencyClassName}DependencyInterface { \n #{interfaceFunctionsInitializer.join(' ')} \n } \n \n
 class #{dependencyClassName}Dependency implements 
 #{dependencyClassName}DependencySource , #{dependencyClassName}DependencyInterface { \n
+\n
+\t #{implementationFunctionsInitializer.join(' ')} \n
+\n
 }
 '''
 ].join(' ')
-#END PRESENTATION
+#END DEPENDENCY
 
 
 #UNIT TEST
@@ -82,7 +94,7 @@ var sut = #{dependencyClassName}Dependency();\n
 if dependencyName.length > 1
 
     back = "\ && cd .. "
-    #Service
+    #Dependency
 	createDependency = 
             "cd lib" + 
             "\ && cd base" +
@@ -91,7 +103,7 @@ if dependencyName.length > 1
             "\ && cd " + dependencyFileName +
             "\ && touch " + dependencyFileName + "_dependency.dart" +
             "\ && tee " + dependencyFileName + "_dependency.dart <<< " + dependencyClassInitializer
-    # End Service
+    # End Dependency
 
      # Unit Test
 	createDependencyTest = 

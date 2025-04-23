@@ -11,7 +11,7 @@ OptionParser.new do |opts|
     puts '''
     ------------------------------------------------------------------------
     Welcome to Flutter Indivara Framework
-    Version : 1.2.0
+    Version : 1.2.0 - 1.2.1
 
     1. Flutter Indivara Project
     example usage :
@@ -41,7 +41,7 @@ OptionParser.new do |opts|
   end
 
   opts.on("-h", "--version", "Show Version") do
-    puts "1.2.0"
+    puts "1.2.1"
     exit
   end
 
