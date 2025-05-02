@@ -75,7 +75,7 @@ void dependencies() { \n
       #{presentationVariableName}Service: #{presentationVariableName}Service,
     ) as #{presentationClassName}ControllerInterface; \n
     \n
-    Get.lazyPut(controller);
+    Get.lazyPut<#{presentationClassName}ControllerInterface>(() => controller);
 }\n
 }
 '''
